@@ -1,21 +1,5 @@
 #!/usr/bin/env ruby
 
-# DP-Shuffle
-# Autor: Fabian Mueller
-# E-Mail: fmueller@secondmeasure.com, fmueller83@googlemail.com
-#
-# Features:
-#  - Iterates over a shuffled list of team members
-#  - Selection of inactive members on start
-#  - Tracks time for each team member
-#  - Shows a 1m progress bar
-#  - Highlights upcoming team member with a :fearful: emoji
-#  - Shows total time
-#  - Shows summary at end
-#  - Go you get back to last member
-#  - Adds additional time to last member for 'Back' option
-#
-
 require 'active_support/all'
 require 'tty-prompt'
 require 'tty-table'
