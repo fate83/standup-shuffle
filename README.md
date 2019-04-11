@@ -1,4 +1,4 @@
-#Standup Shuffle
+# Standup Shuffle
 
 Iterates over a shuffled list of team members for daily standup.
 
