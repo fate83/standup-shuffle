@@ -148,3 +148,5 @@ print_table(members, headlines, index, start_time, times)
 
 time = human_readable_time(elapsed_time({start_time: start_time, end_time: end_time}))
 puts "Time total: #{time}"
+puts '🎉🎉🎉'
+
