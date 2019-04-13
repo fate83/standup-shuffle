@@ -36,7 +36,7 @@ def make_table_values(members, headlines, index, times)
   nuxt = ' 😱️ '
   wait = ' 🔜 '
 
-  table_values = members.map.with_index do |member, idx|
+  members.map.with_index do |member, idx|
     time = human_readable_time(elapsed_time(times[idx]))
 
     return_value = ''
@@ -46,9 +46,11 @@ def make_table_values(members, headlines, index, times)
     return_value = [" #{wait} ", member, time] if idx >  index + 1
     return_value
   end
-  TTY::Table.new headlines, table_values
 end
 
+def make_table(members, headlines, index, times)
+  TTY::Table.new headlines, make_table_values(members, headlines, index, times)
+end
 def clear_screen
   print "\e[2J\e[f"
 end
@@ -59,11 +61,26 @@ def print_table(members, headlines, index, start_time, times)
   puts "Start time: #{start_time&.strftime("%H:%M:%S")}"
   puts "Current time: #{Time.now.strftime("%H:%M:%S")}"
 
-  puts make_table_values(members, headlines, index, times).render(:ascii)
+  puts make_table(members, headlines, index, times).render(:ascii)
 end
 
 def progress_bar
   TTY::ProgressBar.new("1 Minute [:bar]", total: 60)
+end
+
+def write_logs(members, headlines, index, start_time, times)
+  today = Time.now.strftime("%Y-%m-%d")
+  headlines[0] = "Day"
+
+  values = members.zip(times.map { |t| elapsed_time(t) }).map do |row|
+    row.unshift today
+    row.join(";")
+  end.sort
+
+  File.open("log-#{ today }.csv", "w") do |file|
+    file.write("#{headlines.join(";")}\n")
+    file.write("#{values.join("\n")}\n")
+  end
 end
 
 choices = [
@@ -145,7 +162,7 @@ until choice == :quit
 end
 clear_screen
 print_table(members, headlines, index, start_time, times)
-
+write_logs(members, headlines, index, start_time, times)
 time = human_readable_time(elapsed_time({start_time: start_time, end_time: end_time}))
 puts "Time total: #{time}"
 puts '🎉🎉🎉'

@@ -12,6 +12,8 @@ Iterates over a shuffled list of team members for daily standup.
 - Shows a 1-minute progress bar
 - Shows summary at end (includes total time)
 - Adds additional spent time to team member if using the 'Back' command
+- Shows :tada: emoji on summary screen
+- Logs data in csv file
 
 ## Installation
 
