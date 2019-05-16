@@ -85,7 +85,8 @@ end
 
 choices = [
   { key: 'n', name: '(N)ext Member', value: :next },
-  { key: 'e', name: 'Move Member to (E)nd', value: :end },
+  { key: 'a', name: '(A)way Member', value: :away },
+  { key: 'e', name: '(E)nd Member', value: :end },
   { key: 'b', name: '(B)ack', value: :back },
   { key: 'q', name: '(Q)uit', value: :quit }
 ]
@@ -95,9 +96,6 @@ choice = ''
 index = 0
 
 clear_screen
-disabled = prompt.multi_select("Anyone missing?",members, filter: true)
-
-members -= disabled
 members.shuffle!
 
 print_table(members, headlines, index, nil, times)
@@ -108,16 +106,8 @@ start_time = Time.now
 end_time = nil
 
 until choice == :quit
-  loop do
-    member = members[index]
-
-    unless disabled.include?(member)
-      times[index] = { start_time: Time.now, end_time: nil }
-      break
-    end
-
-    index += 1
-  end
+  member = members[index]
+  times[index] = { start_time: Time.now, end_time: nil }
 
   print_table(members, headlines, index, start_time, times)
 
@@ -146,9 +136,12 @@ until choice == :quit
     index += 1
 
   when :end
-    member = members[index]
     members.delete(member)
     members.push member
+
+  when :away
+    members.delete_at(index)
+    times.delete_at(index)
 
   when :back
     if index.positive?
