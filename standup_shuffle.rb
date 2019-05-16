@@ -84,9 +84,10 @@ def write_logs(members, headlines, index, start_time, times)
 end
 
 choices = [
-  { key: 'n', name: 'Next Member', value: :next },
-  { key: 'b', name: 'Back', value: :back },
-  { key: 'q', name: 'Quit', value: :quit }
+  { key: 'n', name: '(N)ext Member', value: :next },
+  { key: 'e', name: 'Move Member to (E)nd', value: :end },
+  { key: 'b', name: '(B)ack', value: :back },
+  { key: 'q', name: '(Q)uit', value: :quit }
 ]
 
 prompt = TTY::Prompt.new
@@ -143,6 +144,12 @@ until choice == :quit
     end
 
     index += 1
+
+  when :end
+    member = members[index]
+    members.delete(member)
+    members.push member
+
   when :back
     if index.positive?
       index -= 1
@@ -160,6 +167,7 @@ until choice == :quit
     break
   end
 end
+
 clear_screen
 print_table(members, headlines, index, start_time, times)
 write_logs(members, headlines, index, start_time, times)
